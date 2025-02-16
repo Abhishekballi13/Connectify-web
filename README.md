@@ -31,3 +31,5 @@
 - created slice,exported reducer and actions and then added reducer to store.
 - login to see if data coming properly to store
 - refactor our code,to add constants file + create a componets folder.
+- you should not be able to use other routes,if token is not present redirect user to login page.
+- created a logout feature,deleted user from store when doing logout.

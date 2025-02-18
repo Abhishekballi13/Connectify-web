@@ -8,8 +8,11 @@ import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
 
+  const [firstName,setFirstName] = useState("");
+  const [lastName,setLastName] = useState("");
   const [emailId,setEmailId] = useState("");
   const [password,setPassword] = useState("");
+  const [isLoginForm,setIsLoginForm] = useState(false);
   const [error,setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,11 +34,55 @@ const Login = () => {
      }
   }
 
+  const handleSignUp = async () => {
+    try {
+     const res = await axios.post(BASE_URL+"/signup",{
+        firstName,
+        lastName,
+        emailId,
+        password,
+        // add photoUrl
+     },{
+       withCredentials:true
+     })
+     // console.log(res.data);
+     dispatch(addUser(res?.data?.data));
+     return navigate("/profile");
+    } catch (error) {
+     setError(error?.response?.data || "Something went wrong!!");
+      console.log(error);
+    }
+ }
+
   return (
     <div className="flex justify-center my-10">
       <div className="card bg-base-100 w-96 shadow-xl">
       <div className="card-body">
-        <h2 className="card-title justify-center">Login</h2>
+        <h2 className="card-title justify-center">{isLoginForm?"Login":"Sign Up"}</h2>
+        <div>
+        {/* you cannot have two children so we have to wrap it inside empty quotes */}
+         {!isLoginForm && <><label className="form-control w-full max-w-xs">
+                <div className="label">
+                  <span className="label-text">First Name</span>
+                </div>
+                <input 
+                type="text" 
+                value={firstName}
+                className="input input-bordered w-full max-w-xs"
+                onChange={(e)=>setFirstName(e.target.value)}
+                />
+            </label>
+              <label className="form-control w-full max-w-xs">
+                <div className="label">
+                  <span className="label-text">Last Name</span>
+                </div>
+                <input 
+                type="text" 
+                value={lastName}
+                className="input input-bordered w-full max-w-xs"
+                onChange={(e)=>setLastName(e.target.value)}
+                />
+            </label> </>}
           <label className="form-control w-full max-w-xs">
               <div className="label">
                 <span className="label-text">Email ID</span>
@@ -52,7 +99,7 @@ const Login = () => {
                 <span className="label-text">Password</span>
               </div>
               <input 
-              type="text"
+              type="password"
               value={password}
               className="input input-bordered w-full max-w-xs"
               onChange={(e)=>setPassword(e.target.value)}
@@ -60,7 +107,11 @@ const Login = () => {
           </label>
           <p className="text-red-500">{error}</p>
         <div className="card-actions justify-center m-2">
-          <button className="btn btn-primary" onClick={handleLogin}>Login</button>
+          <button className="btn btn-primary" onClick={isLoginForm ? handleLogin : handleSignUp}>
+          {isLoginForm?"Login":"Sign Up"}</button>
+        </div>
+        
+        <p className="m-auto py-2 underline cursor-pointer" onClick={()=>setIsLoginForm((value)=>!value)}>{isLoginForm? "New User? Sign Up here":"Existing User? Login here"}</p>
         </div>
       </div>
     </div>

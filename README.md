@@ -36,3 +36,6 @@
 - created our profile and update section.
 - created a toast feature ,when doing update in our profile
 - creating connections page
+- creating requests page
+- accepting and rejecting connections
+- add meta keywords and description for seo.

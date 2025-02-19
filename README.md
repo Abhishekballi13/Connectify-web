@@ -39,3 +39,8 @@
 - creating requests page
 - accepting and rejecting connections
 - add meta keywords and description for seo.
+
+- added feed link in navbar
+- created some awesome features of swipeableCards component and also created buttons if user wish to click and send request or accept/reject
+- used framer motion for swiping cards.
+- added background gradient from top to bottom on feed page to give a cool look.

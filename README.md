@@ -44,3 +44,12 @@
 - created some awesome features of swipeableCards component and also created buttons if user wish to click and send request or accept/reject
 - used framer motion for swiping cards.
 - added background gradient from top to bottom on feed page to give a cool look.
+
+- finally deploying our application,on aws ec2 instance
+- created a t2 micro instance
+- created key pair and stored in secret.pem
+- Run this command, if necessary, to ensure your key is not publicly viewable.
+   chmod 400 "connectify-secret.pem"
+- ssh -i "connectify-secret.pem" ubuntu@ec2-3-95-10-76.compute-1.amazonaws.com ,connect using this command in powershell
+- installed node along with npm
+- cloned our backend and frontend repo

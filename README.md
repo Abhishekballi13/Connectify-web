@@ -45,6 +45,8 @@
 - used framer motion for swiping cards.
 - added background gradient from top to bottom on feed page to give a cool look.
 
+- Deployment
+
 - finally deploying our application,on aws ec2 instance
 - created a t2 micro instance
 - created key pair and stored in secret.pem
@@ -53,3 +55,21 @@
 - ssh -i "connectify-secret.pem" ubuntu@ec2-3-95-10-76.compute-1.amazonaws.com ,connect using this command in powershell
 - installed node along with npm
 - cloned our backend and frontend repo
+- install dependencies in your projects
+- when deploying for production we need build file
+- npm run build - it bundles your project and makes dist folder ,in which it will compile the code
+- sudo apt update
+- sudo apt install nginx (it gives you an http server)
+- sudo systemctl start nginx 
+- sudo systemctl enable nginx
+- Copy code from dist(build files) to/var/www/html
+   sudo scp -r dist/* /var/www/html , 
+   - sudo gives root permission,
+   - scp means copy, 
+   - -r flag means recursilvely for all files and folders there inside it
+   - dist/* where our build file is there,* means all the file
+   - /var/www/html,where we have to copy it
+   - so basically in scp  fromwhere we have to copy ___ to where we have to copy
+   - enable port 80 of your instance
+
+- modified the base_url in constants.js to /api

@@ -73,3 +73,36 @@
    - enable port 80 of your instance
 
 - modified the base_url in constants.js to /api
+
+# Adding a custom domain name
+- cloudfare to manage dns for domain name (connectify.icu) which we have purchased from hostinger
+-  Change Nameservers to Cloudflare
+- created a new record in cloudfare, pointing to our ec2 instance ip
+-  Create a DNS record for connectify.icu
+-  Create a A record for connectify.icu
+-  Create a CNAME record for connectify.icu
+- Configure Security & SSL
+- Set the SSL mode to "Flexible"
+- in SSL/TLS , in edge certificates turn on always use HTTPS , automatic HTTPS rewrites.
+
+# Sending Emails via SES
+
+ - Create a IAM user
+ - GIve access to AmazonSESFullAccess 
+ - Amazon SES: Create an Identity
+ - Verify your domain name
+ - Verify an email address
+ - Install AWS SDK - v3 ses client (npm install @aws-sdk/client-ses)
+ - Code Example https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/javascriptv3/example_code/ses#code-examples
+ - Setup SesClient
+ - Access Credentials should be created in the IAM under Security Credentials Tab
+ - Add the credentials to the env file
+ - write the code for ses client
+ - write code sending email address
+ - make the email dynamic by passing more params to the run function.
+
+
+ # env variables in backend, dotenv package
+ - keeping secrets connection strings , api keys, etc. in a separate file
+ - keeping port , etc. in a separate file
+ - manage multiple environment variables

@@ -18,14 +18,13 @@ const SwipeableCards = ({user,index}) => {
   
     if (Math.abs(xOffset) > swipeThreshold) {
         const status = xOffset > 0 ? "interested" : "ignored"; // Right swipe = interested, Left swipe = ignored
-        console.log(status);
         
         try {
             const res = await axios.post(BASE_URL + "/request/send/" + status + "/" + userId, {}, {
                 withCredentials: true,
             });
-            console.log(res);
             dispatch(removeFeed(userId)); // Remove the card from feed
+            
         } catch (err) {
             console.log(err);
         }

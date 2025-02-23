@@ -106,3 +106,46 @@
  - keeping secrets connection strings , api keys, etc. in a separate file
  - keeping port , etc. in a separate file
  - manage multiple environment variables
+
+# Vercel Deployment
+## fixed a hectic bug while deploying on Vercel
+ - sameSite:None while adding token to cookie
+
+# scheduling cron job
+ - installing node-cron package
+ - Learning about cron expressions syntax - crontab.guru
+ - schedule a job
+ - date-fns - date fns package (for date and time) 
+ - find all the unique Id who have got connection Request in previous day
+ - Send Email 
+ - Explore queue mechanism to send bulk Emails
+ - Amazon Ses Bulk emails
+ - Make sendEmail function dynamic 
+ - bee-queue & bull npm package for queue mechanism
+
+# Razorpay Integration,payment gateway Integration
+
+-  flow of how payment works :- 
+      - User clicks on pay now button,order is created.
+      - a call of create order goes to backend from frontend .
+      - backend will now make a request to razorpay to create a order , it can only make a order beacuse it has secret key.
+      - so backend makes a (create order + secret key) req along with secret key
+      - razorpay will create the order and give back the order id.
+      - now the order id is send back to frontend via backend.
+      - frontend will open up a payment dialog box when it receives order id.
+      - user will enter the card details or any other method net-banking,upi and will do the payment.
+      - then razorpay will automatically tell the backend that the payment is success/failure with help of webhooks.
+      - frontend makes a call to backend to check wether the payment is success or not.
+      - backend will then return the results.
+
+- Sign Up on Razorpay and complete KYC
+- Created a Ui for premium page
+- Creating an API for create order in backend
+- added my key and secret in env file
+- initialized Razorpay in utils
+- creating order on Razorpay
+- created a schema for payment,created schema and model
+- saved the order in payment collections
+- made the api dynamic,not depdending on frontend to pay the amount
+
+- ## creating premium features,when users will buy it he will get premium access.

@@ -146,6 +146,9 @@
 - creating order on Razorpay
 - created a schema for payment,created schema and model
 - saved the order in payment collections
-- made the api dynamic,not depdending on frontend to pay the amount
+- made the api dynamic,not depdending on frontend to send the amount
+- setup razorpay webhook on your live api
+- dont test razorpay webhooks with local,how it will make call to local(instead you can use ngrok if you need to test in local).
+- if anything happens razorpay will automatically tell you
 
 - ## creating premium features,when users will buy it he will get premium access.

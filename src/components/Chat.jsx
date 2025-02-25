@@ -71,7 +71,7 @@ const Chat = () => {
         <h1 className="p-5 border-b border-gray-600 sm:p-3">Chat</h1>
         <div className="flex-1 overflow-scroll p-5 scrollbar">
             {/* display messages */}
-            {messages.map((msg,index)=>{
+            {messages.length>0 && messages.map((msg,index)=>{
                 return <div key={index}> <div className={"chat "+ (user.firstName === msg.firstName?"chat-end":"chat-start")}>
                     <div className="chat-header">
                         {msg.firstName +" "+ msg.lastName}

@@ -36,7 +36,7 @@ const Body = () => {
   },[])
 
   return (
-    <div>
+    <div className="scrollbar">
     {/* providing outlet in body,as we created child elements of body in app.jsx */}
         <Navbar/>
         <Outlet/>

@@ -137,7 +137,7 @@
       - then razorpay will automatically tell the backend that the payment is success/failure with help of webhooks.
       - frontend makes a call to backend to check wether the payment is success or not.
       - backend will then return the results.
-
+- ## creating premium features,when users will buy it he will get premium access.
 - Sign Up on Razorpay and complete KYC
 - Created a Ui for premium page
 - Creating an API for create order in backend
@@ -151,4 +151,24 @@
 - dont test razorpay webhooks with local,how it will make call to local(instead you can use ngrok if you need to test in local).
 - if anything happens razorpay will automatically tell you
 
-- ## creating premium features,when users will buy it he will get premium access.
+
+# Building chat feature for our app, using Socket.io
+- web sockets
+- three points when explaining web sockets
+- low latency,bi directional,event-based
+- web sockets are bidirectional (client can send somthing to server,and server can send something to client)
+- web sockets are event-based (server can send multiple events to client)
+
+- build the UI a chat window on /chat/:targetId
+- npm i socket.io
+- two people connect to the backend server in the same room,whenever they send a message ,both of them will be able to see the messages.
+- setup frontend socket.io-client
+- Initialize the chat
+- createSocketConnection
+- listen to events
+- improve the ui
+- fix security bug - can i send message to a person who is not my friend ? - auth in web sockets
+   - if im not friend is should not be able to chat with that person
+  - non logged in user should not be able to chat
+
+  

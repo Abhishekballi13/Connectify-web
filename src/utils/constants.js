@@ -8,3 +8,7 @@
 
 //for production at vercel
 export const BASE_URL = "https://connectify-murex.vercel.app"
+
+// if(location.hostname==="localhost"){
+
+// }

@@ -11,14 +11,41 @@ const Chat = () => {
     const {targetUserId} = useParams();
     const [newMessage,setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
+    const [socket, setSocket] = useState(null);
     const user = useSelector((store) => store.user);
     const userId = user?._id;
    
+    useEffect(()=>{
+        fetchChatMessages();
+    },[]);
+    
+    useEffect(()=>{
+        //no user id dont create connection
+        if(!userId) return;
+
+       const newSocket = createSocketConnection();
+       setSocket(newSocket);
+       //as soon as the page loads ,the socket connection is made and join chat event is emitted.
+       //you are sending event join,with member whom i want to chat
+       newSocket.emit("joinChat",{userId,targetUserId});
+       
+       newSocket.on("messageReceived",({firstName,text}) => {
+          console.log(firstName + " " + text);
+          //just joining the messages array with the text we got, so no need to update messages state here
+          setMessages((messages) => [...messages,{firstName,text}])
+       })
+
+       //cleanup,called when component is unmounted
+       return () => {
+        newSocket.disconnect();
+       }
+    },[userId,targetUserId])
+
     const fetchChatMessages = async() => {
         const chat = await axios.get(BASE_URL+"/chat/"+targetUserId,{
             withCredentials :true,
         });
-       
+        console.log("these are the messages");
         console.log(chat.data.messages);
         const chatMessages = chat?.data?.messages.map(msg => {
             return {
@@ -29,33 +56,9 @@ const Chat = () => {
         setMessages(chatMessages);
     }
 
-    useEffect(()=>{
-        fetchChatMessages();
-    },[]);
-    
-    useEffect(()=>{
-        //no user id dont create connection
-        if(!userId) return;
-
-       const socket = createSocketConnection();
-       //as soon as the page loads ,the socket connection is made and join chat event is emitted.
-       //you are sending event join,with member whom i want to chat
-       socket.emit("joinChat",{userId,targetUserId});
-       
-       socket.on("messageReceived",({firstName,text}) => {
-          console.log(firstName + " " + text);
-          //just joining the messages array with the text we got, so no need to update messages state here
-          setMessages((messages) => [...messages,{firstName,text}])
-       })
-
-       //cleanup,called when component is unmounted
-       return () => {
-        socket.disconnect();
-       }
-    },[userId,targetUserId])
-
     const sendMessage = () => {
-        const socket = createSocketConnection();
+        // const socket = createSocketConnection();
+        if(!socket) return;
         socket.emit("sendMessage",{
             firstName : user.firstName,
             lastName : user.lastName,

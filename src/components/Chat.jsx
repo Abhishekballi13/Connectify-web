@@ -18,6 +18,14 @@ const Chat = () => {
     useEffect(()=>{
         fetchChatMessages();
     },[]);
+
+    useEffect(() => {
+        const chatContainer = document.querySelector(".scrollbar");
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }, [messages]);
+    
     
     useEffect(()=>{
         //no user id dont create connection
@@ -32,7 +40,7 @@ const Chat = () => {
        newSocket.on("messageReceived",({firstName,text}) => {
           console.log(firstName + " " + text);
           //just joining the messages array with the text we got, so no need to update messages state here
-          setMessages((messages) => [...messages,{firstName,text}])
+          setMessages((prevMessages) => [...prevMessages,{firstName,text}])
        })
 
        //cleanup,called when component is unmounted

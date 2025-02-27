@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom"
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
@@ -12,6 +12,7 @@ const Chat = () => {
     const [newMessage,setNewMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
+    const chatContainerRef = useRef(null);
     const user = useSelector((store) => store.user);
     const userId = user?._id;
    
@@ -20,9 +21,8 @@ const Chat = () => {
     },[]);
 
     useEffect(() => {
-        const chatContainer = document.querySelector(".scrollbar");
-        if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
     }, [messages]);
     
@@ -53,8 +53,8 @@ const Chat = () => {
         const chat = await axios.get(BASE_URL+"/chat/"+targetUserId,{
             withCredentials :true,
         });
-        console.log("these are the messages");
-        console.log(chat.data.messages);
+        // console.log("these are the messages");
+        // console.log(chat.data.messages);
         const chatMessages = chat?.data?.messages.map(msg => {
             return {
                 firstName: msg?.senderId?.firstName,
@@ -80,7 +80,7 @@ const Chat = () => {
   return (
     <div className="w-full sm:w-1/2 mx-auto border border-gray-400 m-5 h-[70vh] flex flex-col">
         <h1 className="p-5 border-b border-gray-600 sm:p-3">Chat</h1>
-        <div className="flex-1 overflow-scroll p-5 scrollbar">
+        <div ref={chatContainerRef} className="flex-1 overflow-scroll p-5 scrollbar">
             {/* display messages */}
             {messages.length>0 && messages.map((msg,index)=>{
                 return <div key={index}> <div className={"chat "+ (user.firstName === msg.firstName?"chat-end":"chat-start")}>

@@ -170,5 +170,10 @@
 - fix security bug - can i send message to a person who is not my friend ? - auth in web sockets
    - if im not friend is should not be able to chat with that person
   - non logged in user should not be able to chat
+  - build feature show green dot if online ,also this one [last seen - 2 hours ago].
+  - limit messages when fetching from db.
+  - do some pagination type of stuff like when you scroll up you get to see only 15 messages,and then as you keep going up message keep     coming.
+    (concept of two players in a room,connecting with each other,sharing moves.) 
+  - can you make a tic tac toe game
+  - can you make chess game 
 
-  

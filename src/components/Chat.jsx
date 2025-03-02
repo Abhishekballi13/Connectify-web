@@ -4,6 +4,7 @@ import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
+import ErrorPage from "./ErrorPage";
 
 
 const Chat = () => {
@@ -12,6 +13,7 @@ const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
     const [onlineStatus,setOnlineStatus] = useState(false);
+    const [targetUserNotFound,setTargetUserNotFound] = useState(false);
     const chatContainerRef = useRef(null);
     const user = useSelector((store) => store.user);
     const userId = user?._id;
@@ -32,14 +34,21 @@ const Chat = () => {
         const newSocket = createSocketConnection();
         setSocket(newSocket);
 
+        newSocket.emit("joinChat",{userId,targetUserId});
+        
+        //this means the user are not connected to each other
+        newSocket.on("error",({errorMessage})=>{
+            console.log(errorMessage);
+            setTargetUserNotFound(true);
+        })
+        
+        //checking wether the target user is online or not.
         newSocket.emit("userOnline", { userId,targetUserId});
 
         newSocket.on("updateOnlineStatus", ({ status }) => {
             console.log(status);
           setOnlineStatus(status);
         });
-
-        newSocket.emit("joinChat",{userId,targetUserId});
        
         newSocket.on("messageReceived",({firstName,text}) => {
           setMessages((prevMessages) => [...prevMessages,{firstName,text}])
@@ -81,6 +90,8 @@ const Chat = () => {
         })
         setNewMessage("");
     }
+    console.log(targetUserNotFound);
+    if (targetUserNotFound) return <ErrorPage message="You are not connected with this user!" />;
 
   return (
     <div className="w-full sm:w-1/2 mx-auto border border-gray-400 m-5 h-[70vh] flex flex-col relative">

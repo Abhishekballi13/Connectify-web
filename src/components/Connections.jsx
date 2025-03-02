@@ -5,54 +5,73 @@ import { useDispatch, useSelector } from "react-redux";
 import { addConnections } from "../utils/connectionSlice";
 import { Link } from "react-router-dom";
 
-
 const Connections = () => {
-
-    const dispatch = useDispatch();
-    const connections = useSelector((store) => store.connections);
+  const dispatch = useDispatch();
+  const connections = useSelector((store) => store.connections);
 
   const fetchConnections = async () => {
-    try{
-       const res = await axios.get(BASE_URL+"/user/connections",{
-        withCredentials:true,
-       })
+    try {
+      const res = await axios.get(BASE_URL + "/user/connections", {
+        withCredentials: true,
+      });
 
-       
-       dispatch(addConnections(res?.data?.data));
-    }catch(err){
-        console.log(err.message);
+      dispatch(addConnections(res?.data?.data));
+    } catch (err) {
+      console.log(err.message);
     }
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchConnections();
-  },[])
+  }, []);
 
-  if(!connections) return;
+  if (!connections) return null;
 
-  if(connections.length===0) return <h1>No Connections Found</h1>
+  if (connections.length === 0)
+    return <h1 className="text-center text-white text-2xl my-20">No Connections Found</h1>;
 
   return (
-    <div className="my-20 text-center">
-      <h1 className="font-bold text-white text-3xl">Connections</h1>
-      {connections.map((connection)=>{
-        const{_id,firstName,lastName,photoUrl,age,gender,about} = connection;
-        return (
-            <div className="flex m-4 p-4 rounded-lg bg-base-300 w-1/2 mx-auto" key={_id}>
-            <div>
-                <img alt="photo" className="w-20 h-20 rounded-full" src={photoUrl}/>
-            </div>
-            <div className="text-left mx-4">
-                <h1>{firstName+""+lastName}</h1>
-                  {age && gender && <p>{age+", "+gender}</p>}
-                <p>{about}</p>
-               <Link to={"/chat/"+_id}> <button className="btn btn-primary">Chat</button></Link>
-            </div>
-            </div>
-        )
-      })}
-    </div>
-  )
-}
+    <div className="my-20 text-center min-h-screen pb-20">
+      <h1 className="font-bold text-white text-3xl mb-6">Connections</h1>
+      
+      <div className="flex flex-col items-center gap-4 ">
+        {connections.map((connection) => {
+          const { _id, firstName, lastName, photoUrl, age, gender, about } = connection;
+          return (
+            <div
+              className="flex flex-col md:flex-row items-center bg-base-300 w-full max-w-2xl rounded-lg shadow-lg p-4 md:p-6"
+              key={_id}
+            >
+              {/* User Image */}
+              <div className="flex-shrink-0">
+                <img
+                  alt="User"
+                  className="w-24 h-24 md:w-32 md:h-32 object-cover rounded-full border-2 border-primary"
+                  src={photoUrl}
+                />
+              </div>
 
-export default Connections
+              {/* User Info */}
+              <div className="text-center md:text-left md:ml-6 flex-1">
+                <h2 className="text-xl font-semibold">
+                  {firstName} {lastName?lastName:""}
+                </h2>
+                {age && gender && <p className="text-gray-300">{age}, {gender}</p>}
+                <p className="text-gray-400 mt-2">{about}</p>
+
+                {/* Chat Button */}
+                <div className="mt-4">
+                  <Link to={"/chat/" + _id}>
+                    <button className="btn btn-primary w-full md:w-auto">Chat</button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default Connections;

@@ -15,4 +15,4 @@
 //     : "https://connectify-murex.vercel.app";
 
 
-export const BASE_URL = "https://connectify-4rzu.onrender.com";
+export const BASE_URL = "http://localhost:7777";

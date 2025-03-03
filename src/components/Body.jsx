@@ -15,18 +15,22 @@ const Body = () => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get(BASE_URL+"/profile/view",{
-        withCredentials:true,
+      const res = await axios.get(BASE_URL + "/profile/view", {
+        withCredentials: true,
       });
       dispatch(addUser(res.data));
     } catch (error) {
-      //means user is not logged in ,so move to login page.
-      if(error.status===401){
-        navigate("/login");
+      if (error.response?.status === 401) {
+        // Check if the current route is for admin login
+        if (window.location.pathname.startsWith("/admin")) {
+          navigate("/admin/login");
+        } else {
+          navigate("/login");
+        }
       }
-       console.log(error);
+      console.log(error);
     }
-  }
+  };
   
   //adding user to our store as soon as our component is loaded.
   useEffect(()=>{

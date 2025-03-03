@@ -9,6 +9,8 @@ import Connections from "./components/Connections";
 import Requests from "./components/Requests";
 import Premium from "./components/Premium";
 import Chat from "./components/Chat";
+import AdminLogin from "./components/AdminLogin";
+import AdminDashboard from "./components/AdminDashboard";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="/" element={<Body/>}>
               <Route path="/" element={<Feed/>}/>
               <Route path="/login" element={<Login/>}/>
+              <Route path="/admin/login" element={<AdminLogin/>}/>
+              <Route path="/admin/dashboard" element={<AdminDashboard/>}/>
               <Route path="/profile" element={<Profile/>}/>
               <Route path="/connections" element={<Connections/>}/>
               <Route path="/requests" element={<Requests/>}/>

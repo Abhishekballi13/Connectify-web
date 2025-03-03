@@ -14,6 +14,8 @@ const Chat = () => {
     const [onlineStatus, setOnlineStatus] = useState(false);
     const [targetUserNotFound, setTargetUserNotFound] = useState(false);
     const [lastSeen, setLastSeen] = useState(null);
+    const [page,setPage] = useState(1);
+    const [hasMore,setHasMore] = useState(true);
     const chatContainerRef = useRef(null);
     const user = useSelector((store) => store.user);
     const userId = user?._id;
@@ -40,7 +42,15 @@ const Chat = () => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
-    }, [messages.length]); // Use messages.length instead of newMessage to avoid unnecessary updates
+    }, [newMessage]); 
+    
+    //this one is handling scroll when new message arrives
+    //we are showing 15 messages at a time. 
+    useEffect(() => {
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = 1220;
+        }
+    }, [messages.length]);// Use messages.length instead of newMessage to avoid unnecessary updates
 
     useEffect(() => {
         if (!userId) return;
@@ -99,9 +109,11 @@ const Chat = () => {
         socket.emit("messageSeen", { userId, targetUserId });
     }, [socket, targetUserId, userId, messages.length]);
 
-    const fetchChatMessages = async () => {
+    const fetchChatMessages = async (page=1) => {
+        if(!hasMore) return;
         try {
-            const chat = await axios.get(`${BASE_URL}/chat/${targetUserId}`, { withCredentials: true });
+            const chat = await axios.get(`${BASE_URL}/chat/${targetUserId}?page=${page}&limit=15`, { withCredentials: true });
+            // console.log(chat.data.messages);
             const chatMessages = chat?.data?.messages.map((msg) => ({
                 senderId: msg?.senderId?._id,
                 firstName: msg?.senderId?.firstName,
@@ -109,7 +121,9 @@ const Chat = () => {
                 text: msg?.text,
                 status: msg?.status,
             }));
-            setMessages(chatMessages);
+            const msg = [...chatMessages,...messages];
+            setMessages(msg);
+            setHasMore(chat.data.hasMore);
         } catch (err) {
             console.error("Error fetching chat messages", err);
         }
@@ -140,6 +154,18 @@ const Chat = () => {
         return lastSeenDate.toLocaleString();
     };
 
+
+    const handleScroll = () => {
+        const chatContainer = chatContainerRef.current;
+        if(chatContainer.scrollTop===0 && hasMore){
+            setPage(prevPage => {
+                const nextPage = prevPage + 1;
+                fetchChatMessages(nextPage);
+                return nextPage;
+            });
+        }
+    }
+
     if (targetUserNotFound) return <ErrorPage message="You are not connected with this user!" />;
 
     return (
@@ -154,7 +180,7 @@ const Chat = () => {
                 </div>
             </div>
 
-            <div ref={chatContainerRef} className="flex-1 overflow-scroll p-5 scrollbar">
+            <div ref={chatContainerRef} onScroll={handleScroll} className="flex-1 overflow-scroll p-5 scrollbar">
                 {messages.length > 0 &&
                     messages.map((msg, index) => (
                         <div key={index}>
